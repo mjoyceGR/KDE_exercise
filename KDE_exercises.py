@@ -9,7 +9,7 @@
 
 ################################
 #
-# cell 1
+# cell/step 1
 #
 ################################
 import numpy as np
@@ -23,7 +23,7 @@ from scipy.stats import norm
 
 ################################
 #
-# cell 2
+# cell/step 2
 #
 ################################
 def set_fig(ax):
@@ -48,9 +48,7 @@ Joyce_ages= np.loadtxt(data_file, usecols=(0), unpack = True)
 (Jmu, Jsigma) = norm.fit(Joyce_ages)
 Jstats=r'$\mu=$' + "%.2f"%Jmu + ';'+r' $\sigma=$' + "%.2f"%Jsigma
 
-
 #print("ages successfully read in")
-
 
 ################################
 #
@@ -70,6 +68,7 @@ plt.legend(loc=2)
 plt.show()
 plt.close()
 
+#sys.exit()
 
 ################################
 #
@@ -85,10 +84,11 @@ plt.ylabel('Kernel Density Estimate', fontsize=16)
 plt.show()
 plt.close()
 
+#sys.exit()
 
 ################################
 #
-# cell 6
+# cell/step 6
 #
 ################################
 fig, ax = plt.subplots(figsize = (8,8))
@@ -105,33 +105,34 @@ plt.legend(loc=2)
 plt.show()
 plt.close()
 
-sys.exit()
+#sys.exit()
 
 ##################################
-# EXERCISE
+# EXERCISE 1
 ##################################
 # Using the above as a template, compare a Gaussian 
 # versus KDE fit to the "Bensby Ages" 
 # in stellar_ages.dat
 #
-
-Bensby_ages = ...
-(..., ...) = norm.fit(Bensby_ages)
-Bstats= ...
-
 ## hint: repeat steps 3, 4, 5 with new variable names
+#
+# Ex):
+#
+#    Bensby_ages = ...
+#    (..., ...) = norm.fit(Bensby_ages)
+#    Bstats= ...
+
 
 
 ################################
 #
-# cell 7
+# cell/step 7 -- Resampling the KDE
+#
+# you will need to comment out  
+#          sys.exit() 
+# above to proceed
 #
 ################################
-########################################
-#
-# resampling 
-#
-########################################
 import sklearn
 from sklearn.neighbors import KernelDensity
 
@@ -146,7 +147,7 @@ plt.show()
 plt.close()
 
 ##################################
-# EXERCISE
+# EXERCISE 2
 ##################################
 # repeat the above, setting the bandwidth to 0.1 and 0.01
 # plot all three kdes on top of each other
@@ -154,7 +155,7 @@ plt.close()
 
 
 ##################################
-# EXERCISE
+# EXERCISE 3
 ##################################
 # Make a sklearn KDE for Bensby's ages
 # Visually, determine an appropriate value for the bandwidth parameter in this case
