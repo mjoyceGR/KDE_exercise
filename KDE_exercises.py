@@ -36,7 +36,6 @@ def set_fig(ax):
 
 #print("plot settings function defined")
 
-
 ################################
 #
 # cell/step 3
@@ -59,8 +58,8 @@ fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
 
 n, bins, patches = plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
-y = scipy.stats.norm.pdf(bins, Jmu, Jsigma)*len(Joyce_ages)
-plt.plot(bins, y, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
+gaussian_pdf = scipy.stats.norm.pdf(bins, Jmu, Jsigma)*len(Joyce_ages)
+plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
 
 plt.xlabel('Ages (Gyr)', fontsize=20)
 plt.ylabel('Count', fontsize=20)
@@ -77,12 +76,6 @@ plt.close()
 ################################
 idx_array = np.linspace(min(Joyce_ages), max(Joyce_ages), 1000)
 kde = stats.gaussian_kde(Joyce_ages)
-plt.plot(idx_array, kde(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
-
-plt.xlabel('Ages (Gyr)', fontsize=16)
-plt.ylabel('Kernel Density Estimate', fontsize=16)
-plt.show()
-plt.close()
 
 #sys.exit()
 
@@ -95,7 +88,7 @@ fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
 
 plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
-plt.plot(bins, y, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
+plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
 plt.plot(idx_array, kde(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
 
 plt.xlabel('Ages (Gyr)', fontsize=20)
@@ -123,6 +116,7 @@ plt.close()
 #    Bstats= ...
 
 
+sys.exit()
 
 ################################
 #
