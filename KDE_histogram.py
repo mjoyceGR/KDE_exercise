@@ -12,18 +12,17 @@ import subprocess
 import scipy
 from scipy import stats
 from scipy.stats import norm
-sys.path.append('../../../MESA/pyMESA/')
-sys.path.append('../../../bulge_isochrones/')
+# sys.path.append('../../../MESA/pyMESA/')
+# sys.path.append('../../../bulge_isochrones/')
 
 
-# import isochrone_module as im 		# mine
-import photometry_module as ph 		# mine
+# # import isochrone_module as im 		# mine
+# import photometry_module as ph 		# mine
 
 ##########
 bin_num = 'auto'
 save_name = 'KDE_histogram.pdf'
 ###########
-
 
 
 data_file = 'stellar_ages.dat'
@@ -39,7 +38,16 @@ Bstats=r'$\mu=$' + "%.2f"%Bmu + ';'+r' $\sigma=$' + "%.2f"%Bsigma
 
 #np.histogram()
 fig, ax = plt.subplots(figsize = (16,16))
-ph.set_fig(ax)
+#ph.set_fig(ax)
+
+
+# ax.yaxis.set_minor_locator(AutoMinorLocator())
+# ax.xaxis.set_minor_locator(AutoMinorLocator())
+ax.tick_params(axis = 'both',which='both', width=2)
+ax.tick_params(axis = 'both',which='major', length=12)
+ax.tick_params(axis = 'both',which='minor', length=8, color='black')
+ax.tick_params(axis='both', which='major', labelsize=24)
+ax.tick_params(axis='both', which='minor', labelsize=20)
 
 
 n, bins, patches = plt.hist(Joyce_ages,  bins=bin_num, alpha = 1, color= 'navy',\
@@ -50,31 +58,11 @@ y = scipy.stats.norm.pdf(bins, Jmu, Jsigma)*len(Joyce_ages)
 plt.plot(bins, y, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
 
 
-#X = Joyce_ages
-#idx_array = np.arange(0, np.floor(max(Joyce_ages)), 1)
 
-#idx_array = np.arange(0, len(Joyce_ages), 1)
 idx_array = np.linspace(min(Joyce_ages), max(Joyce_ages), 1000)
-print('idx_array: ',idx_array)
-
-#X = [idx_array, Joyce_ages]
-
-#bandwidth = 2 ## but actually load age uncertainties for real exercise
-#kde  = KernelDensity(kernel = 'gaussian', bandwidth = bandwidth ).fit(X)
-
-#weights = [] ## same size as data array
-#kde = stats.gaussian_kde(Joyce_ages, bw_method = 1)
+#print('idx_array: ',idx_array)
 kde = stats.gaussian_kde(Joyce_ages)
-
-#print("kde: ", kde
 ax.plot(idx_array, kde(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
-
-
-# #							edgecolor = 'orange', linewidth=5, linestyle = ':',\
-# n, bins, patches = plt.hist(Bensby_ages,bins = bin_num, alpha = 0.65, color='red',\
-# 						    label = 'Ages from Bensby et al.')#+'\n'+Bstats)
-# y = scipy.stats.norm.pdf(bins, Bmu, Bsigma)*len(Bensby_ages)
-# plt.plot(bins, y, ':', color='orange', linewidth=5, label='Bensby et al. '+Bstats)
 
 
 plt.xlabel('Ages (Gyr)', fontsize=30)
@@ -89,9 +77,9 @@ bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.65),\
 horizontalalignment='right', verticalalignment='top') 
 
 plt.legend(loc=2, fontsize=14)
-plt.savefig(save_name)
+#plt.savefig(save_name)
 
-#plt.show()
+plt.show()
 
-plt.close()
-subprocess.call('pdfcrop '+ save_name + ' ' + save_name, shell = True)
+#plt.close()
+#subprocess.call('pdfcrop '+ save_name + ' ' + save_name, shell = True)
