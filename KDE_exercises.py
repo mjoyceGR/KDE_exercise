@@ -57,7 +57,6 @@ Joyce_ages= np.loadtxt(data_file, usecols=(0), unpack = True)
 ## format a string to use as a plotting label
 Jstats=r'$\mu=$' + "%.2f"%Jmu + ';'+r' $\sigma=$' + "%.2f"%Jsigma
 
-
 ################################
 #
 # cell/step 4
@@ -142,7 +141,7 @@ plt.close()
 # versus KDE fit to the "Bensby Ages" 
 # in stellar_ages.dat
 #
-## hint: repeat steps 3, 4, 5 with new variable names
+## hint: repeat steps 3, 4, 5, and 6 with new variable names
 #
 # Ex):
 #
@@ -190,7 +189,7 @@ plt.close()
 ##################################
 # EXERCISE 2
 ##################################
-# repeat the above, setting the bandwidth to 0.1 and 0.01
+# repeat the above, setting the bandwidth to 0.1 and then to 0.01
 # plot all three kdes on top of each other
 # which is the best fit to the Joyce Ages histogram?
 
@@ -199,4 +198,5 @@ plt.close()
 # EXERCISE 3
 ##################################
 # Make a sklearn KDE for Bensby's ages
-# Visually, determine an appropriate value for the bandwidth parameter in this case
+# Visually, determine an appropriate value 
+# for the bandwidth parameter in this case
