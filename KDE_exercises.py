@@ -12,6 +12,7 @@
 # cell/step 1
 #
 ################################
+## import the modules
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -26,6 +27,7 @@ from scipy.stats import norm
 # cell/step 2
 #
 ################################
+## define a function for making the figures look nice
 def set_fig(ax):
     ax.tick_params(axis = 'both',which='both', width=2)
     ax.tick_params(axis = 'both',which='major', length=12)
@@ -41,13 +43,20 @@ def set_fig(ax):
 # cell/step 3
 #
 ################################
+## load the data
 data_file = 'stellar_ages.dat'
 Joyce_ages= np.loadtxt(data_file, usecols=(0), unpack = True)
 
+################################
+# create a Gaussian, or normal distribution,
+# fit to the stellar age data defined by
+# [mu (the mean), sigma (1 standard deviation)]
+#################################
 (Jmu, Jsigma) = norm.fit(Joyce_ages)
+
+## format a string to use as a plotting label
 Jstats=r'$\mu=$' + "%.2f"%Jmu + ';'+r' $\sigma=$' + "%.2f"%Jsigma
 
-#print("ages successfully read in")
 
 ################################
 #
@@ -57,9 +66,25 @@ Jstats=r'$\mu=$' + "%.2f"%Jmu + ';'+r' $\sigma=$' + "%.2f"%Jsigma
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
 
-n, bins, patches = plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
+###############################
+# create a histogram object that has
+# an array of bin locations as an attribute 
+###############################
+histogram = plt.hist(Joyce_ages,  bins="auto", color='navy', label='histogram of Joyce ages')
+bins = histogram[1]
+
+###############################
+# create a normal distribution defined by
+# [mu, sigma] 
+# to be plotted against the 
+# centers of the bins on the x-axis
+###############################
 gaussian_pdf = scipy.stats.norm.pdf(bins, Jmu, Jsigma)*len(Joyce_ages)
-plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
+
+###############################
+# plot our Gaussian vs the bins
+###############################
+plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='Gaussian fit to Joyce ages:\n'+Jstats)
 
 plt.xlabel('Ages (Gyr)', fontsize=20)
 plt.ylabel('Count', fontsize=20)
@@ -74,10 +99,16 @@ plt.close()
 # cell/step 5
 #
 ################################
-idx_array = np.linspace(min(Joyce_ages), max(Joyce_ages), 1000)
-kde = stats.gaussian_kde(Joyce_ages)
+# create a uniform array of values spanning the stellar ages
+# to serve as the x-values for the kde
+age_x_values = np.linspace(min(Joyce_ages), max(Joyce_ages), 1000)
 
-#sys.exit()
+## create a kde model for the stellar ages instead of a normal distribution
+kde_model = stats.gaussian_kde(Joyce_ages)
+kde = kde_model(age_x_values)
+
+## scale the kde by the number of stellar ages in our sample (91)
+scaled_kde = kde*len(Joyce_ages)
 
 ################################
 #
@@ -87,9 +118,13 @@ kde = stats.gaussian_kde(Joyce_ages)
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
 
-plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
-plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
-plt.plot(idx_array, kde(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
+## histogram from earlier
+plt.hist(Joyce_ages,  bins="auto", color= 'navy', label='histogram of Joyce ages') 
+## Gaussian fit from earlier
+plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='Gaussian fit to Joyce ages:\n'+Jstats) 
+
+## NEW: add the KDE to the plot
+plt.plot(age_x_values, scaled_kde, linewidth=5, linestyle='-', color='lightblue', label='KDE of Joyce age distribution')
 
 plt.xlabel('Ages (Gyr)', fontsize=20)
 plt.ylabel('Count', fontsize=20)
@@ -116,7 +151,7 @@ plt.close()
 #    Bstats= ...
 
 
-sys.exit()
+#sys.exit()
 
 ################################
 #
@@ -130,12 +165,24 @@ sys.exit()
 import sklearn
 from sklearn.neighbors import KernelDensity
 
-kde1 = KernelDensity(bandwidth=1).fit(Joyce_ages.reshape(-1, 1))
-y1 = kde1.sample(91)
+bandwidth_value = 1
+number_of_bins = 8
+
+kde1 = KernelDensity(bandwidth=bandwidth_value).fit(Joyce_ages.reshape(-1, 1))
+kde_model_1 = kde1.sample(91)
 
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
-ax.hist(y1, bins=8, density=False, color='lightblue', alpha=0.5, label=r'$h = 1$')
+
+## histogram from earlier
+plt.hist(Joyce_ages,  bins="auto", color= 'navy', label='histogram of Joyce ages') 
+
+## NEW: add our new KDE model with bandwidth h = 1
+ax.hist(kde_model_1, bins=number_of_bins, density=False, color='lightblue', alpha=0.7, label=r'sklearn KDE with $h=1$')
+
+plt.xlabel('Ages (Gyr)', fontsize=20)
+plt.ylabel('Count', fontsize=20)
+plt.legend(loc=2)
 
 plt.show()
 plt.close()

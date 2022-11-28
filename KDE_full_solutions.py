@@ -57,9 +57,10 @@ Jstats=r'$\mu=$' + "%.2f"%Jmu + ';'+r' $\sigma=$' + "%.2f"%Jsigma
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
 
-n, bins, patches = plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
-gaussian_pdf = scipy.stats.norm.pdf(bins, Jmu, Jsigma)*len(Joyce_ages)
-plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
+#n, bins, patches = plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
+nbins = 8
+gaussian_pdf = scipy.stats.norm.pdf(nbins, Jmu, Jsigma)*len(Joyce_ages)
+plt.plot(nbins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
 
 plt.xlabel('Ages (Gyr)', fontsize=20)
 plt.ylabel('Count', fontsize=20)
@@ -76,11 +77,6 @@ plt.close()
 ################################
 idx_array = np.linspace(min(Joyce_ages), max(Joyce_ages), 1000)
 kde = stats.gaussian_kde(Joyce_ages)
-# plt.plot(idx_array, kde(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
-# plt.xlabel('Ages (Gyr)', fontsize=16)
-# plt.ylabel('Kernel Density Estimate', fontsize=16)
-# plt.show()
-# plt.close()
 
 #sys.exit()
 
@@ -93,7 +89,7 @@ fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
 
 plt.hist(Joyce_ages,  bins="auto", alpha = 1, color= 'navy')
-plt.plot(bins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
+plt.plot(nbins, gaussian_pdf, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Jstats)
 plt.plot(idx_array, kde(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
 
 plt.xlabel('Ages (Gyr)', fontsize=20)
@@ -121,20 +117,23 @@ plt.close()
 
 
 ################################
-# cell/step 3 for Bensby
+# SOLUTION 1: cell/step 3 for Bensby
 ################################
 Bensby_ages= np.loadtxt(data_file, usecols=(1), unpack = True)
 (Bmu, Bsigma) = norm.fit(Bensby_ages)
 Bstats=r'$\mu=$' + "%.2f"%Bmu + ';'+r' $\sigma=$' + "%.2f"%Bsigma
 
 ################################
-# cell/step 4 for Bensby
+# SOLUTION 1: cell/step 4 for Bensby
 ################################
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
-n2, bins2, patches2 = plt.hist(Bensby_ages,  bins="auto", alpha = 1, color= 'navy')
-y2 = scipy.stats.norm.pdf(bins2, Bmu, Bsigma)*len(Bensby_ages)
-plt.plot(bins2, y2, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Bstats)
+
+nbins = 8
+gaussian_pdf2 = scipy.stats.norm.pdf(nbins, Bmu, Bsigma)*len(Bensby_ages)
+
+plt.plot(nbins, gaussian_pdf2, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Bstats)
+
 plt.xlabel('Ages (Gyr)', fontsize=20)
 plt.ylabel('Count', fontsize=20)
 plt.legend(loc=2)
@@ -142,25 +141,21 @@ plt.show()
 plt.close()
 
 ################################
-# cell/step 5 for Bensby
+# SOLUTION 1: cell/step 5 for Bensby
 ################################
 idx_array_Bensby = np.linspace(min(Bensby_ages), max(Bensby_ages), 1000)
 kde_Bensby = stats.gaussian_kde(Bensby_ages)
-# plt.plot(idx_array_Bensby, kde_Bensby(idx_array)*len(Joyce_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
-# plt.xlabel('Ages (Gyr)', fontsize=16)
-# plt.ylabel('Kernel Density Estimate', fontsize=16)
-# plt.show()
-# plt.close()
-#sys.exit()
 
 ################################
-# cell/step 6 for Bensby
+# SOLUTION 2: cell/step 6 for Bensby
 ################################
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
+
 plt.hist(Bensby_ages,  bins="auto", alpha = 1, color= 'navy')
-plt.plot(bins2, y2, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Bstats)
+plt.plot(nbins, gaussian_pdf2, '--', color='cornflowerblue', linewidth=5, label='normal distribution: '+Bstats)
 plt.plot(idx_array_Bensby, kde_Bensby(idx_array_Bensby)*len(Bensby_ages), linewidth=5, linestyle='-', color='lightblue', label='KDE')
+
 plt.xlabel('Ages (Gyr)', fontsize=20)
 plt.ylabel('Count', fontsize=20)
 plt.legend(loc=2)
@@ -214,11 +209,11 @@ plt.close()
 #
 ################################
 kde2 = KernelDensity(bandwidth=0.1).fit(Joyce_ages.reshape(-1, 1))
-y2 = kde2.sample(91)
+gaussian_pdf2 = kde2.sample(91)
 
 fig, ax = plt.subplots(figsize = (8,8))
 set_fig(ax)
-ax.hist(y2, 		 bins=8, density=False, color='purple',    alpha=0.7, label=r'distribution drawn from $h = 0.1$')
+ax.hist(gaussian_pdf2, 		 bins=8, density=False, color='purple',    alpha=0.7, label=r'distribution drawn from $h = 0.1$')
 
 
 plt.show()
@@ -250,7 +245,7 @@ set_fig(ax)
 #ax.plot(idx_array, y1, color='lightblue', label='KDE 1')
 #ax.hist(y1_resample, bins=8, density=False, color='lightblue', alpha=0.5, label=r'KDE 1 resampled; $h=auto$') ## set density = False
 ax.hist(y1,          bins=8, density=False, color='lightblue', alpha=0.5, label=r'$h = 1$')
-ax.hist(y2, 		 bins=8, density=False, color='purple',    alpha=0.7, label=r'$h = 0.1$')
+ax.hist(gaussian_pdf2, 		 bins=8, density=False, color='purple',    alpha=0.7, label=r'$h = 0.1$')
 ax.hist(y3, 		 bins=8, density=False, color='magenta',   alpha=0.7, label=r'$h = 0.01$')
 plt.legend(loc=2)
 
