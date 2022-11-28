@@ -14,7 +14,7 @@
 ################################
 import numpy as np
 import matplotlib.pyplot as plt
-
+import sys
 import scipy
 from scipy import stats
 from scipy.stats import norm
@@ -86,21 +86,6 @@ plt.show()
 plt.close()
 
 
-##################################
-# EXERCISE
-##################################
-# Using the above as a template, compare a Gaussian 
-# versus KDE fit to the "Bensby Ages" 
-# in stellar_ages.dat
-#
-
-Bensby_ages = ...
-(..., ...) = norm.fit(Bensby_ages)
-Bstats= ...
-
-## hint: repeat steps 3, 4, 5 with new variable names
-
-
 ################################
 #
 # cell 6
@@ -119,6 +104,23 @@ plt.legend(loc=2)
 
 plt.show()
 plt.close()
+
+sys.exit()
+
+##################################
+# EXERCISE
+##################################
+# Using the above as a template, compare a Gaussian 
+# versus KDE fit to the "Bensby Ages" 
+# in stellar_ages.dat
+#
+
+Bensby_ages = ...
+(..., ...) = norm.fit(Bensby_ages)
+Bstats= ...
+
+## hint: repeat steps 3, 4, 5 with new variable names
+
 
 ################################
 #
